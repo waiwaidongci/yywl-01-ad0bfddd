@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "weight_policy": {
+    "version": 1,
+    "basis": "business_priority",
+    "core_min_share": 0.5
+  },
+  "gate_tests": [
+    "test_outputs.py::test_entrypoint_is_executable",
+    "test_outputs.py::test_help_contract_is_exact"
+  ],
+  "tests": {
+    "test_outputs.py::test_success_is_silent_and_compact": {
+      "weight": 0.03,
+      "priority": "supporting",
+      "rationale": "成功报告必须静默并以紧凑字节交付，保证结果可直接进入现有巡检档案。"
+    },
+    "test_outputs.py::test_top_level_schema_and_paths_are_exact": {
+      "weight": 0.03,
+      "priority": "schema",
+      "rationale": "顶层五栏、观测三栏和路径合法性是批处理接口，宽松解析会让错误批次进入估计。"
+    },
+    "test_outputs.py::test_identifiers_and_unit_are_valid": {
+      "weight": 0.03,
+      "priority": "schema",
+      "rationale": "研究号、记录号和 month 单位必须固定，否则生存时间无法追溯到正确巡检数据。"
+    },
+    "test_outputs.py::test_observation_month_boundaries_are_accepted": {
+      "weight": 0.03,
+      "priority": "boundary",
+      "rationale": "36/60 条记录、12/30 个不同月份和查询数量下界都必须真实可运行。"
+    },
+    "test_outputs.py::test_observation_month_boundaries_are_refused": {
+      "weight": 0.03,
+      "priority": "boundary",
+      "rationale": "记录数、月份覆盖、查询数量和递增成员关系越界时必须拒绝，避免失去非参数可识别性。"
+    },
+    "test_outputs.py::test_event_and_time_values_are_validated": {
+      "weight": 0.03,
+      "priority": "boundary",
+      "rationale": "月份范围和 event 零一类型直接决定二项似然，布尔值不能静默当作整数。"
+    },
+    "test_outputs.py::test_duplicate_keys_and_malformed_input_are_refused": {
+      "weight": 0.03,
+      "priority": "schema",
+      "rationale": "重复键、坏 JSON 和非 UTF-8 文件若被接受，会改变巡检月份或事件计数。"
+    },
+    "test_outputs.py::test_refusal_channel_preserves_existing_report": {
+      "weight": 0.03,
+      "priority": "recovery",
+      "rationale": "拒收必须保持固定错误通道和旧报告原字节，避免半成品覆盖正式生存包络。"
+    },
+    "test_outputs.py::test_refusal_leaves_no_temporary_entries": {
+      "weight": 0.02,
+      "priority": "recovery",
+      "rationale": "失败路径不得遗留临时项，保证后续精确估计从干净目录开始。"
+    },
+    "test_outputs.py::test_unreached_median_is_refused": {
+      "weight": 0.02,
+      "priority": "boundary",
+      "rationale": "总体分布未越过中位数时不存在可交付中位区间，必须稳定拒收。"
+    },
+    "test_outputs.py::test_repeated_runs_are_byte_identical": {
+      "weight": 0.02,
+      "priority": "supporting",
+      "rationale": "同一冻结巡检表必须产生字节一致的规范报告，支持复核与差异审计。"
+    },
+    "test_outputs.py::test_monotone_input_keeps_observed_order": {
+      "weight": 0.12,
+      "priority": "core",
+      "rationale": "当前状态数据的非参数 CDF 主结果必须保持单调并由二项似然选出。"
+    },
+    "test_outputs.py::test_violations_are_pooled": {
+      "weight": 0.12,
+      "priority": "core",
+      "rationale": "相邻比例下降时必须正确合并违背块，逐月原始比例会破坏统计估计。"
+    },
+    "test_outputs.py::test_equal_rates_are_merged": {
+      "weight": 0.12,
+      "priority": "core",
+      "rationale": "相等比例也要合并成规范块，否则同一 NPMLE 会产生多个不可复核表示。"
+    },
+    "test_outputs.py::test_queries_and_median_use_exact_fractions": {
+      "weight": 0.12,
+      "priority": "core",
+      "rationale": "生存率、块质量和中位区间必须使用约分有理数，浮点近似不能作为精确包络。"
+    },
+    "test_outputs.py::test_maximum_public_case_finishes_within_limit": {
+      "weight": 0.12,
+      "priority": "core",
+      "rationale": "60 条记录和 30 个不同月份的公开上限必须在线性 PAVA 时间预算内精确完成。"
+    },
+    "test_outputs.py::test_output_schema_order_is_exact": {
+      "weight": 0.10,
+      "priority": "core",
+      "rationale": "固定顶层、块、查询和中位结构是下游生存档案消费的硬契约。"
+    }
+  }
+}
