@@ -7,7 +7,8 @@ COPY app/ /app/
 RUN chown -R analyst:analyst /app \
     && chmod 0755 /app/analyze.py \
     && mkdir -p /logs/verifier \
-    && chown -R analyst:analyst /logs
+    && chown -R analyst:analyst /logs \
+    && chmod 0777 /logs/verifier
 
 USER analyst
 CMD ["sleep", "infinity"]
